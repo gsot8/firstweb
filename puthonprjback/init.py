@@ -2,6 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
 from tables import db
+from flask_cors import CORS
 
 
 def create_app():
@@ -11,6 +12,8 @@ def create_app():
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///metanit.db"
     # initialize the app with the extension
     db.init_app(app)
+
+    CORS(app)
 
     with app.app_context():
         db.create_all()

@@ -1,4 +1,5 @@
 from init import create_app
+import datetime
 import requests
 from flask import request,redirect,url_for,render_template,abort
 from tables import User,Room,Timetable
@@ -36,14 +37,19 @@ def room_create():
 def timetable_create():
     if request.method == "POST":
         print('here')
+        s = request.json["created_date"]
+        s =datetime.datetime.strptime(s, "%Y-%m-%dT%H:%M").date()
         timetable = Timetable(
             count=request.json["count"],
             floor=request.json["floor"],
+            created_date = s
         )
-        print(timetable)
+        print(timetable.__dict__)
         app.db.session.add(timetable)
         app.db.session.commit()
         return 'succses'
+    if request.method == "GET":
+        return list(map(lambda x:x.as_dict(),Timetable.query.all()))
     return abort(404)
 
 
