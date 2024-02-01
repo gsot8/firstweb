@@ -5,6 +5,11 @@ from flask import request,redirect,url_for,render_template,abort
 from tables import User,Room,Timetable
 
 app = create_app()
+@app.route("/room", methods=["GET", "POST"])
+def get_all_rooms():
+    if request.method == "GET":
+        return list(map(lambda x:x.as_dict(),Room.query.all()))
+    return abort(404)
 
 @app.route("/users/create", methods=["GET", "POST"])
 def user_create():
@@ -42,6 +47,7 @@ def timetable_create():
         timetable = Timetable(
             count=request.json["count"],
             floor=request.json["floor"],
+            id_room= request.json["id_room"],
             created_date = s
         )
         print(timetable.__dict__)

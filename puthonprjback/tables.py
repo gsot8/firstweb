@@ -14,6 +14,8 @@ db = SQLAlchemy(model_class=Base)
 class Room(db.Model):
     number = Column(Integer, primary_key=True)
     values = Column(Integer)
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
 class User(db.Model):
